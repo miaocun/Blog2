@@ -1,0 +1,124 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+
+<div class="row my-4">
+    <div class="col-md-8">
+        {% if keyword %}
+            <h4 class="mb-4">｢｢{{ keyword }}の検索結果｣｣</h4>
+        {% endif %}
+        {% for post in post_data %}
+        <div class="card mb-4">
+            <div class="card-body" style="background-color: rgb(247, 245, 231);">
+                <style>
+                    .bln {
+                    position: relative;
+                    display: inline-block;
+                    margin: 0;
+                    padding: 20px;
+                    color: #000;
+                    font-size: 2rem;
+                    background: #ffffff;
+                    border: solid 2px #13bf00;
+                    border-radius: 15px;
+                    margin-bottom: 30px;
+
+                    border-left: 10px solid #ff6633;
+                    }
+                 
+                    .bln:before {
+                    position: absolute;
+                    content: "";
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -76px;
+                    border: 36px solid transparent;
+                    border-top: 18px solid #13bf00;
+                    }
+                    
+                    .bln:after {
+                    position: absolute;
+                    content: "";
+                    top: 100%;
+                    left: 50%;
+                    margin-left: -70px;
+                    border: 30px solid transparent;
+                    border-top: 15px solid #ffffff;
+                    }
+                </style>
+                <h1 class="bln"> {{post.title}}<span class="small" style="color:brown"> - {{ post.category }}</span></h1>
+                <div class="content">{{ post.convert_markdown_to_html_shorter | safe }}</div>
+                <div class="btn btn-warning">詳細</div>
+            </div>
+            <div class="card-footer text-muted" style="background-color: khaki;">
+                {{ post.created|date }}
+            </div>
+            <a href="{% url 'post_detail' post.id %}" class="stretched-link"></a>
+        </div>
+        {% endfor %}
+
+        {% if post_data.has_previous %}
+            <a class="page-link text-primary d-inline-block" href="?page={{ post_data.previous_page_number }}&keyword={{keyword}}">&lt; 前へ</a>
+        {% else %}
+            <span>&lt;前へ</span>
+        {% endif %}
+    
+        {% for num in post_data.paginator.page_range %}
+            {% if post_data.number == num %}
+                <span>{{ num }}</span>
+                <a class="disable" href=>{{pg}}</a>
+            {% else %}
+                <a class="page-link text-primary d-inline-block" href="?csrfmiddlewaretoken={{csrf_token}}&q={{q}}&page={{num}}&keyword={{keyword}}">{{num}}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if post_data.has_next %}
+            <a class="page-link text-primary d-inline-block" href="?page={{ post_data.next_page_number }}&keyword={{keyword}}">次へ &gt;</a>
+        {% else %}
+            <span>次へ &gt;</span>
+        {% endif %}
+
+    </div>
+    <div class="col-md-4"  style="margin-top: 100px;">
+        <div class="card">
+            <h5 class="card-header" style="background-color: rgb(253, 237, 93);">このブログについて</h5>
+            <div class="card-body" >
+                <p>岩手大学研究室ブログ</p>
+                <p class="mb-0">研究室の日常や日々の発見について書いていきます。お問い合わせは直接メールでお願いします。</p>
+            </div>
+        </div>
+        <div class="card my-4">
+            <h5 class="card-header" style="background-color: rgb(253, 237, 93);">カテゴリー</h5>
+            <div class="card-body">
+                <div class="row">
+                    {% for category in category_data %}
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="{% url 'category' category %}">
+                                        {{ category.name }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card my-4">
+            <h5 class="card-header" style="background-color: rgb(253, 237, 93);">検索</h5>
+            <div class="card-body">
+                <form method="get" action="{% url 'search' %}" class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder = "ブログを検索...">
+                    <button class="btn btn-warning ml-2" type="submit">検索</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

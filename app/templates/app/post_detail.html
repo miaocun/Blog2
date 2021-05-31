@@ -1,0 +1,24 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<div class="card mb-4" style="margin-top: 100px;">
+    <div class="card-body" style="background-color: rgb(247, 245, 231);">
+        <h2 class="my-4">{{ post_data.title }}</h2>
+        <p>{{ post_data.category }}</p>
+        <hr>
+        <p>{{ post_data.convert_markdown_to_html | safe }}</p>
+        <hr>
+        <p>{{ post_data.created }}</p>
+        {% if user.is_authenticated %}
+        <hr>
+
+        <div class="d-flex mb-5">
+            <a href="{% url 'post_edit' post_data.id %}" class="btn btn-warning mr-2">編集する</a>
+            <a href="{% url 'post_delete' post_data.id %}" class="btn btn-danger">削除する</a>
+        </div>
+     </div>
+</div>
+        
+{% endif %}
+
+{% endblock %}

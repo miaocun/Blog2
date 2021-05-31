@@ -1,0 +1,13 @@
+django~=2.2.10
+django-widget-tweaks~=1.4.8
+django-allauth~=0.41.0
+Bootstrap4
+django-bootstrap-form
+django-fontawesome
+django-bootstrap4
+Pillow
+django-markdownx==3.0.1
+
+-r requirements-dev.txt
+psycopg2
+gunicorn
