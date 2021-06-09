@@ -1,0 +1,6 @@
+db.splite3
+.venv
+Pipfile
+Pipfile.lock
+**/__pycache__/*
+settings.json
